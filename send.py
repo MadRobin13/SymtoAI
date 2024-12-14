@@ -1,7 +1,7 @@
 import requests
 
 # Define the URL of the server
-url = 'http://127.0.0.1:5000/predict'
+url = 'http://10.210.7.149:5000/predict'
 
 # Path to the image file
 image_path = r'images\11071-infected_blackhead-648x364-body.webp'
