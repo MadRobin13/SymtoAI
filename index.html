@@ -16,8 +16,9 @@
             align-items: center;
             min-height: 100vh;
             background-image: linear-gradient(#09a5ff, #9ffff5);
+            margin: auto;
         }
-
+        
         .container {
             width: 80%;
             max-width: 1000px;
@@ -28,30 +29,46 @@
             overflow: hidden;
             box-sizing: border-box;
         }
-
+        
         h1 {
             color: #5a67d8;
             text-align: center;
             font-size: 2rem;
             margin-bottom: 20px;
         }
-
-        input[type="file"] {
+        
+        button {
             display: block;
             width: 95%;
             padding: 12px;
             font-size: 1rem;
-            border: 1px solid #ccc;
+            border: none;
             border-radius: 8px;
             margin-bottom: 20px;
             margin: 10px auto;
-            background-color: #fafafa;
+            background-color: #2196f3; /* Blue */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: bold;
+            text-align: center;
         }
-
-        input[type="file"]:hover {
-            background-color: #f1f1f1;
+        
+        button:hover {
+            background-color: #1976d2; /* Darker blue */
+            transform: translateY(-2px);
         }
-
+        
+        button:active {
+            background-color: #1565c0; /* Even darker blue */
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background-color: #b0bec5; /* Grey when uploading */
+            cursor: not-allowed;
+        }
+        
         #output {
             padding: 20px;
             background-color: #f9f9f9;
@@ -61,26 +78,26 @@
             min-height: 300px;
             overflow-y: auto;
         }
-
+        
         h1, h2, h3 {
             color: #2c5282;
             margin-top: 1.5rem;
         }
-
+        
         p {
             line-height: 1.6;
             font-size: 1.1rem;
             margin-bottom: 1rem;
         }
-
+        
         strong {
             font-weight: bold;
         }
-
+        
         em {
             font-style: italic;
         }
-
+        
         code {
             background: #2d3748;
             color: #fff;
@@ -88,7 +105,7 @@
             border-radius: 4px;
             font-size: 0.9rem;
         }
-
+        
         pre {
             background-color: #2d3748;
             color: #fff;
@@ -97,40 +114,64 @@
             font-family: 'Courier New', Courier, monospace;
             overflow-x: auto;
         }
-
+        
         pre code {
             background: transparent;
             padding: 0;
         }
-
+        
         br {
             margin-bottom: 0.5rem;
-        }
+        }                
     </style>
 </head>
 <body>
     <div class="container">
         <h1>SymtoAI</h1>
-        <input type="file" id="fileInput" accept=".md" />
+        <button id="fileButton">Upload Markdown File</button>
+        <input type="file" id="fileInput" accept=".md" style="display: none;" />
         <div id="output"></div>
     </div>
 
     <script>
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
+        const fileButton = document.getElementById('fileButton');
+        const fileInput = document.getElementById('fileInput');
 
+        fileButton.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const button = fileButton;
+        
+            // Disable the button and change its color to grey
+            button.disabled = true;
+            button.style.backgroundColor = '#b0bec5';
+            button.textContent = 'Uploading...'; // Change text while uploading
+            
             if (file) {
                 const reader = new FileReader();
-
+        
                 reader.onload = function(e) {
                     const markdownContent = e.target.result;
                     document.getElementById('output').innerHTML = parseMarkdown(markdownContent);
+        
+                    // Change the button color to green and update text when file is displayed
+                    button.disabled = false;
+                    button.style.backgroundColor = '#4caf50'; // Green
+                    button.textContent = 'File Uploaded'; // Update text
                 };
-
+        
                 reader.readAsText(file);
+            } else {
+                // Re-enable the button if no file was selected
+                button.disabled = false;
+                button.style.backgroundColor = '#2196f3'; // Blue
+                button.textContent = 'Upload Markdown File'; // Reset text
             }
         });
-
+        
         function parseMarkdown(markdown) {
             // Basic Markdown to HTML parsing (simplified)
             return markdown
