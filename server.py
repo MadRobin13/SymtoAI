@@ -62,4 +62,4 @@ def predict():
 
 if __name__ == '__main__':
     # Run the Flask app
-    app.run(debug=True, host='10.210.7.149', port=5000)
+    app.run(debug=True, host='192.168.164.11', port=5000)
